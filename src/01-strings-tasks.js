@@ -278,11 +278,24 @@ function isString(value) {
  */
 function getCardId(value) {
   const suits = ['♣', '♦', '♥', '♠'];
-  const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  const ranks = [
+    'A',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+  ];
   const deck = suits.flatMap((suit) => ranks.map((rank) => rank + suit));
   return deck.indexOf(value);
 }
-
 
 module.exports = {
   concatenateStrings,
