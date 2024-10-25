@@ -302,35 +302,35 @@ function reverseInteger(num) {
  *   4916123456789012 => false
  */
 function isCreditCardNumber(ccn) {
-  // Convert the CCN to a string to easily access each digit
   const ccnStr = ccn.toString();
-  
-  // Initialize the sum of the digits
   let sum = 0;
-  
-  // Iterate over each digit in the CCN
-  for (let i = 0; i < ccnStr.length; i++) {
-    // Convert the current digit to an integer
-    let digit = parseInt(ccnStr[i], 10);
-    
-    // If the current digit is at an even position (0-indexed), double it
-    if (i % 2 === 0) {
-      digit = digit * 2;
-      
-      // If the doubled digit is greater than 9, subtract 9
+  ccnStr.split('').forEach((char, i) => {
+    let digit = parseInt(char, 10);
+    if ((ccnStr.length - i) % 2 === 0) {
+      digit *= 2;
       if (digit > 9) {
-        digit = digit - 9;
+        digit -= 9;
       }
     }
-    
-    // Add the digit to the sum
     sum += digit;
-  }
-  
-  // If the sum is divisible by 10, the CCN is valid
+  });
   return sum % 10 === 0;
 }
 
+/**
+ * Returns the digital root of integer:
+ *   step1 : find sum of all digits
+ *   step2 : if sum > 9 then goto step1 otherwise return the sum
+ *
+ * @param {number} n
+ * @return {number}
+ *
+ * @example:
+ *   12345 ( 1+2+3+4+5 = 15, 1+5 = 6) => 6
+ *   23456 ( 2+3+4+5+6 = 20, 2+0 = 2) => 2
+ *   10000 ( 1+0+0+0+0 = 1 ) => 1
+ *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
+ */
 /**
  * Returns the digital root of integer:
  *   step1 : find sum of all digits
@@ -370,8 +370,26 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const brackets = {
+    '(': ')',
+    '[': ']',
+    '{': '}',
+    '<': '>',
+  };
+  const stack = [];
+
+  for (let i = 0; i < str.length; i += 1) {
+    const char = str[i];
+    if (brackets[char]) {
+      stack.push(char);
+    } else if (Object.values(brackets).includes(char)) {
+      if (stack.length === 0 || brackets[stack.pop()] !== char) {
+        return false;
+      }
+    }
+  }
+  return stack.length === 0;
 }
 
 /**
@@ -394,8 +412,19 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  if (n < 2 || n > 10) {
+    throw new Error('Radix must be between 2 and 10');
+  }
+
+  const digits = [];
+  let tempNum = num;
+  while (tempNum > 0) {
+    digits.push(tempNum % n);
+    tempNum = Math.floor(tempNum / n);
+  }
+
+  return digits.reverse().join('');
 }
 
 /**
@@ -432,8 +461,24 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  if (m1[0].length !== m2.length) {
+    throw new Error('Matrix dimensions are incompatible for multiplication');
+  }
+
+  const result = [];
+  for (let i = 0; i < m1.length; i += 1) {
+    result[i] = [];
+    for (let j = 0; j < m2[0].length; j += 1) {
+      let sum = 0;
+      for (let k = 0; k < m1[0].length; k += 1) {
+        sum += m1[i][k] * m2[k][j];
+      }
+      result[i][j] = sum;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -466,8 +511,43 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  for (let i = 0; i < 3; i += 1) {
+    if (
+      position[i][0] === position[i][1]
+      && position[i][1] === position[i][2]
+      && position[i][0] !== undefined
+    ) {
+      return position[i][0];
+    }
+  }
+
+  for (let i = 0; i < 3; i += 1) {
+    if (
+      position[0][i] === position[1][i]
+      && position[1][i] === position[2][i]
+      && position[0][i] !== undefined
+    ) {
+      return position[0][i];
+    }
+  }
+
+  if (
+    position[0][0] === position[1][1]
+    && position[1][1] === position[2][2]
+    && position[0][0] !== undefined
+  ) {
+    return position[0][0];
+  }
+  if (
+    position[0][2] === position[1][1]
+    && position[1][1] === position[2][0]
+    && position[0][2] !== undefined
+  ) {
+    return position[0][2];
+  }
+
+  return undefined;
 }
 
 module.exports = {
